@@ -384,7 +384,9 @@
 .app-main {
   flex: 1;
   min-height: 0;
+  min-width: 0;
   overflow: auto;
+  max-width: 100%;
 }
 
 /* Home */
@@ -423,31 +425,53 @@
   background: #3d7aef;
 }
 
-/* Builder — two column */
+/* Builder — two column, stacks on small screens */
 .builder-page {
   display: flex;
+  flex-direction: row;
   height: 100%;
   min-height: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 .builder-left {
-  flex: 0 0 50%;
+  flex: 1 1 45%;
+  min-width: 0;
   overflow: auto;
   padding: 1.5rem;
   border-right: 1px solid #3a3f4b;
 }
 .builder-right {
-  flex: 0 0 50%;
+  flex: 1 1 55%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
   background: #252830;
 }
 .builder-preview-header {
+  flex-shrink: 0;
   padding: 0.75rem 1rem;
   font-size: 0.85rem;
   font-weight: 500;
   color: #b0b3b8;
   border-bottom: 1px solid #3a3f4b;
+}
+@media (max-width: 900px) {
+  .builder-page {
+    flex-direction: column;
+    overflow: auto;
+  }
+  .builder-left {
+    flex: 0 0 auto;
+    border-right: none;
+    border-bottom: 1px solid #3a3f4b;
+  }
+  .builder-right {
+    flex: 1 1 auto;
+    min-height: 400px;
+  }
 }
 .resume-form {
   max-width: 480px;
@@ -501,6 +525,14 @@
 .form-grid-2 .span-2 {
   grid-column: span 2;
 }
+@media (max-width: 480px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .form-grid-2 .span-2 {
+    grid-column: span 1;
+  }
+}
 .form-section label {
   display: flex;
   flex-direction: column;
@@ -550,6 +582,7 @@
 /* Live preview (builder right panel) */
 .live-preview-shell {
   flex: 1;
+  min-height: 0;
   overflow: auto;
   padding: 1rem;
   display: flex;
@@ -558,14 +591,21 @@
 }
 .live-preview-paper {
   width: 100%;
-  max-width: 420px;
-  min-height: 520px;
+  max-width: 100%;
+  min-height: 400px;
   padding: 1.5rem;
   background: #1a1d23;
   border-radius: 4px;
   border: 1px solid #3a3f4b;
   color: #e4e6eb;
   font-size: 0.85rem;
+  box-sizing: border-box;
+}
+@media (min-width: 901px) {
+  .live-preview-paper {
+    max-width: 420px;
+    min-height: 520px;
+  }
 }
 .live-preview-paper .preview-header {
   margin-bottom: 1rem;

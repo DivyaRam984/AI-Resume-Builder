@@ -1,6 +1,15 @@
+import { createPortal } from 'react-dom';
 import { Outlet, NavLink } from 'react-router-dom';
 
 export function AppLayout() {
+  const bottomPanel = (
+    <footer className="app-bottom-panel">
+      <NavLink to="/preview">Preview</NavLink>
+      <span className="app-bottom-sep">·</span>
+      <NavLink to="/proof">Proof</NavLink>
+    </footer>
+  );
+
   return (
     <div className="app-layout">
       <header className="app-nav">
@@ -22,11 +31,8 @@ export function AppLayout() {
       <main className="app-main">
         <Outlet />
       </main>
-      <footer className="app-bottom-panel">
-        <NavLink to="/preview">Preview</NavLink>
-        <span className="app-bottom-sep">·</span>
-        <NavLink to="/proof">Proof</NavLink>
-      </footer>
+      {typeof document !== 'undefined' &&
+        createPortal(bottomPanel, document.body)}
     </div>
   );
 }

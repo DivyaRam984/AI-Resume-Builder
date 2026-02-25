@@ -33,6 +33,7 @@ body {
   min-width: 0;
   overflow-x: auto;
   overflow-y: auto;
+  position: relative;
 }
 
 h1 {

@@ -342,6 +342,7 @@
   flex-direction: column;
   background: #1a1d23;
   color: #e4e6eb;
+  overflow: visible;
 }
 .app-nav {
   display: flex;
@@ -392,8 +393,9 @@
   position: fixed;
   bottom: 0;
   left: 0;
+  right: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -401,6 +403,9 @@
   padding: 0.75rem 1rem;
   background: #252830;
   border-top: 1px solid #3a3f4b;
+  box-sizing: border-box;
+  visibility: visible;
+  pointer-events: auto;
 }
 .app-bottom-panel a {
   color: #2d6ae0;

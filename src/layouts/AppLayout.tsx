@@ -22,6 +22,11 @@ export function AppLayout() {
       <main className="app-main">
         <Outlet />
       </main>
+      <footer className="app-bottom-panel">
+        <NavLink to="/preview">Preview</NavLink>
+        <span className="app-bottom-sep">·</span>
+        <NavLink to="/proof">Proof</NavLink>
+      </footer>
     </div>
   );
 }

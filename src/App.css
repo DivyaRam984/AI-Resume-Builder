@@ -482,6 +482,68 @@
   color: #b0b3b8;
   border-bottom: 1px solid #3a3f4b;
 }
+.builder-right-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.builder-right-content .live-preview-shell {
+  flex: 1;
+  min-height: 0;
+}
+/* ATS Score v1 — calm, premium */
+.ats-score-block {
+  flex-shrink: 0;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid #3a3f4b;
+}
+.ats-score-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #b0b3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+.ats-score-meter-wrap {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #1a1d23;
+}
+.ats-score-meter-bg {
+  position: absolute;
+  inset: 0;
+  background: #2d3139;
+  border-radius: 4px;
+}
+.ats-score-meter-bar {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  border-radius: 4px;
+  background: #2d6ae0;
+  transition: width 0.25s ease;
+}
+.ats-score-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f0f2f5;
+  margin-top: 0.35rem;
+}
+.ats-suggestions {
+  margin: 0.5rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.8rem;
+  color: #b0b3b8;
+  line-height: 1.4;
+}
+.ats-suggestions li {
+  margin-bottom: 0.2rem;
+}
 @media (min-width: 1024px) {
   .builder-page {
     flex-direction: row;
@@ -700,6 +762,26 @@
   text-align: center;
   color: #6b7080;
   font-size: 0.9rem;
+}
+.live-preview-paper .preview-contact a {
+  color: #2d6ae0;
+  text-decoration: none;
+}
+.live-preview-paper .preview-contact a:hover {
+  text-decoration: underline;
+}
+.live-preview-paper .preview-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.live-preview-paper .preview-links a {
+  color: #2d6ae0;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.live-preview-paper .preview-links a:hover {
+  text-decoration: underline;
 }
 
 /* Preview page — minimal black + white resume */

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import type {
   ResumeData,
   PersonalInfo,
@@ -13,6 +13,31 @@ import {
   createEmptyExperience,
   createEmptyProject,
 } from '../types/resume';
+
+const STORAGE_KEY = 'resumeBuilderData';
+
+function loadStoredData(): ResumeData {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return initialResumeData;
+    const parsed = JSON.parse(raw) as unknown;
+    if (parsed && typeof parsed === 'object' && 'personal' in parsed) {
+      const p = parsed as Record<string, unknown>;
+      return {
+        personal: { ...initialResumeData.personal, ...(p.personal as object) },
+        summary: typeof p.summary === 'string' ? p.summary : initialResumeData.summary,
+        education: Array.isArray(p.education) ? p.education as EducationEntry[] : initialResumeData.education,
+        experience: Array.isArray(p.experience) ? p.experience as ExperienceEntry[] : initialResumeData.experience,
+        projects: Array.isArray(p.projects) ? p.projects as ProjectEntry[] : initialResumeData.projects,
+        skills: typeof p.skills === 'string' ? p.skills : initialResumeData.skills,
+        links: { ...initialResumeData.links, ...(p.links as object) },
+      };
+    }
+  } catch {
+    /* ignore */
+  }
+  return initialResumeData;
+}
 
 const SAMPLE_DATA: ResumeData = {
   personal: {
@@ -88,7 +113,15 @@ type ResumeContextValue = {
 const ResumeContext = createContext<ResumeContextValue | null>(null);
 
 export function ResumeProvider({ children }: { children: React.ReactNode }) {
-  const [data, setData] = useState<ResumeData>(initialResumeData);
+  const [data, setData] = useState<ResumeData>(loadStoredData);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch {
+      /* ignore */
+    }
+  }, [data]);
 
   const setPersonal = useCallback((p: PersonalInfo) => {
     setData((prev) => ({ ...prev, personal: p }));

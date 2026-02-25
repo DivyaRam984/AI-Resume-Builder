@@ -85,7 +85,16 @@ export function ResumePreviewDocument() {
         </section>
       )}
 
-      {!personal.name && !summary && education.every((e) => !e.institution && !e.degree) && !experience.some((e) => e.role || e.company) && !projects.some((p) => p.name) && !skills && (
+      {(links.github?.trim() || links.linkedin?.trim()) && (
+        <section className="resume-doc-section">
+          <h2 className="resume-doc-h2">Links</h2>
+          <p className="resume-doc-p resume-doc-skills">
+            {[links.github, links.linkedin].filter(Boolean).join(' · ')}
+          </p>
+        </section>
+      )}
+
+      {!personal.name && !summary && education.every((e) => !e.institution && !e.degree) && !experience.some((e) => e.role || e.company) && !projects.some((p) => p.name) && !skills && !links.github?.trim() && !links.linkedin?.trim() && (
         <p className="resume-doc-empty">Add content in Builder to see your resume here.</p>
       )}
     </article>

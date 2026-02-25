@@ -334,3 +334,403 @@
 .proof-back-link:hover {
   text-decoration: underline;
 }
+
+/* ========== AI Resume Builder — App Layout (KodNest Premium) ========== */
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #1a1d23;
+  color: #e4e6eb;
+}
+.app-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.5rem;
+  background: #252830;
+  border-bottom: 1px solid #3a3f4b;
+  flex-shrink: 0;
+}
+.app-brand {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #f0f2f5;
+  text-decoration: none;
+}
+.app-brand:hover {
+  color: #fff;
+}
+.app-nav-links {
+  display: flex;
+  gap: 0.25rem;
+}
+.app-nav-links a {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: #b0b3b8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.15s, background 0.15s;
+}
+.app-nav-links a:hover {
+  color: #f0f2f5;
+  background: #2d3139;
+}
+.app-nav-links a.active {
+  color: #f0f2f5;
+  background: #3a3f4b;
+}
+.app-main {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Home */
+.home-page {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+.home-headline {
+  font-size: 2.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #f0f2f5;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+}
+.home-subline {
+  font-size: 1.05rem;
+  color: #b0b3b8;
+  margin: 0 0 2rem;
+  line-height: 1.5;
+}
+.home-cta {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #2d6ae0;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.home-cta:hover {
+  background: #3d7aef;
+}
+
+/* Builder — two column */
+.builder-page {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+.builder-left {
+  flex: 0 0 50%;
+  overflow: auto;
+  padding: 1.5rem;
+  border-right: 1px solid #3a3f4b;
+}
+.builder-right {
+  flex: 0 0 50%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #252830;
+}
+.builder-preview-header {
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #b0b3b8;
+  border-bottom: 1px solid #3a3f4b;
+}
+.resume-form {
+  max-width: 480px;
+}
+.form-actions-top {
+  margin-bottom: 1.5rem;
+}
+.btn-secondary {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #3a3f4b;
+  background: #2d3139;
+  color: #e4e6eb;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background: #3a3f4b;
+}
+.form-section {
+  margin-bottom: 1.75rem;
+}
+.form-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.form-section-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f0f2f5;
+}
+.btn-text {
+  padding: 0.25rem 0.5rem;
+  background: none;
+  border: none;
+  color: #2d6ae0;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.btn-text:hover {
+  text-decoration: underline;
+}
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.form-grid-2 .span-2 {
+  grid-column: span 2;
+}
+.form-section label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #b0b3b8;
+}
+.form-section input,
+.form-textarea,
+.form-input {
+  padding: 0.5rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid #3a3f4b;
+  background: #1a1d23;
+  color: #e4e6eb;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+.form-section input::placeholder,
+.form-textarea::placeholder {
+  color: #6b7080;
+}
+.form-textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+.form-block {
+  padding: 1rem;
+  background: #252830;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  position: relative;
+}
+.btn-remove {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: none;
+  border: none;
+  color: #b0b3b8;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.btn-remove:hover {
+  color: #f0f2f5;
+}
+
+/* Live preview (builder right panel) */
+.live-preview-shell {
+  flex: 1;
+  overflow: auto;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.live-preview-paper {
+  width: 100%;
+  max-width: 420px;
+  min-height: 520px;
+  padding: 1.5rem;
+  background: #1a1d23;
+  border-radius: 4px;
+  border: 1px solid #3a3f4b;
+  color: #e4e6eb;
+  font-size: 0.85rem;
+}
+.live-preview-paper .preview-header {
+  margin-bottom: 1rem;
+}
+.live-preview-paper .preview-name {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f0f2f5;
+}
+.live-preview-paper .preview-contact {
+  font-size: 0.75rem;
+  color: #b0b3b8;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.live-preview-paper .preview-section {
+  margin-bottom: 1rem;
+}
+.live-preview-paper .preview-section-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #b0b3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.live-preview-paper .preview-summary,
+.live-preview-paper .preview-details {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #b0b3b8;
+}
+.live-preview-paper .preview-item {
+  margin-bottom: 0.75rem;
+}
+.live-preview-paper .preview-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.live-preview-paper .preview-muted {
+  font-size: 0.8rem;
+  color: #b0b3b8;
+}
+.live-preview-paper .preview-details {
+  margin-top: 0.2rem;
+}
+.live-preview-paper .preview-skills {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #b0b3b8;
+}
+.live-preview-paper .preview-placeholder {
+  padding: 2rem;
+  text-align: center;
+  color: #6b7080;
+  font-size: 0.9rem;
+}
+
+/* Preview page — minimal black + white resume */
+.preview-page {
+  padding: 2rem 1.5rem;
+  background: #f5f5f5;
+  min-height: 100%;
+}
+.preview-page-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.resume-document {
+  background: #fff;
+  color: #111;
+  padding: 2.5rem 2.5rem 3rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.45;
+}
+.resume-doc-header {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #111;
+}
+.resume-doc-name {
+  margin: 0 0 0.35rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #111;
+}
+.resume-doc-contact {
+  font-size: 0.9rem;
+  color: #333;
+}
+.resume-doc-section {
+  margin-bottom: 1.25rem;
+}
+.resume-doc-h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #111;
+}
+.resume-doc-p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+.resume-doc-block {
+  margin-bottom: 1rem;
+}
+.resume-doc-block-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+.resume-doc-strong {
+  font-size: 0.95rem;
+  color: #111;
+}
+.resume-doc-muted {
+  font-size: 0.9rem;
+  color: #555;
+}
+.resume-doc-sub {
+  margin: 0.15rem 0 0;
+}
+.resume-doc-details {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+}
+.resume-doc-skills {
+  font-size: 0.95rem;
+}
+.resume-doc-empty {
+  color: #888;
+  font-style: italic;
+  margin: 1rem 0 0;
+}
+
+/* Proof app page (placeholder) */
+.proof-app-page {
+  padding: 2rem 1.5rem;
+}
+.proof-app-placeholder {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #252830;
+  border-radius: 8px;
+  text-align: center;
+}
+.proof-app-placeholder h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: #f0f2f5;
+}
+.proof-app-placeholder p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #b0b3b8;
+}

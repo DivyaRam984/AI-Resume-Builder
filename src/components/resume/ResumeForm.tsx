@@ -1,9 +1,11 @@
 import { useResume } from '../../context/ResumeContext';
 import { BulletDetailsField } from './BulletDetailsField';
+import { ProjectsSection } from './ProjectsSection';
+import { SkillsSection } from './SkillsSection';
 
 export function ResumeForm() {
-  const { data, setPersonal, setSummary, addEducation, removeEducation, updateEducation, addExperience, removeExperience, updateExperience, addProject, removeProject, updateProject, setSkills, setLinks, loadSampleData } = useResume();
-  const { personal, summary, education, experience, projects, skills, links } = data;
+  const { data, setPersonal, setSummary, addEducation, removeEducation, updateEducation, addExperience, removeExperience, updateExperience, setLinks, loadSampleData } = useResume();
+  const { personal, summary, education, experience, links } = data;
 
   return (
     <div className="resume-form">
@@ -170,60 +172,8 @@ export function ResumeForm() {
         ))}
       </section>
 
-      <section className="form-section">
-        <div className="form-section-head">
-          <h3 className="form-section-title">Projects</h3>
-          <button type="button" className="btn-text" onClick={addProject}>
-            + Add
-          </button>
-        </div>
-        {projects.map((entry) => (
-          <div key={entry.id} className="form-block">
-            <div className="form-grid-2">
-              <label>
-                <span>Project name</span>
-                <input
-                  value={entry.name}
-                  onChange={(e) => updateProject(entry.id, { name: e.target.value })}
-                  placeholder="Project name"
-                />
-              </label>
-              <label>
-                <span>Period (optional)</span>
-                <input
-                  value={entry.period ?? ''}
-                  onChange={(e) => updateProject(entry.id, { period: e.target.value })}
-                  placeholder="e.g. 2024"
-                />
-              </label>
-              <label className="span-2">
-                <span>Details (optional) — one bullet per line</span>
-                <BulletDetailsField
-                  value={entry.details ?? ''}
-                  onChange={(v) => updateProject(entry.id, { details: v })}
-                  placeholder="Tech stack, outcome... (one per line)"
-                />
-              </label>
-            </div>
-            {projects.length > 1 && (
-              <button type="button" className="btn-remove" onClick={() => removeProject(entry.id)}>
-                Remove
-              </button>
-            )}
-          </div>
-        ))}
-      </section>
-
-      <section className="form-section">
-        <h3 className="form-section-title">Skills</h3>
-        <input
-          type="text"
-          className="form-input"
-          value={skills}
-          onChange={(e) => setSkills(e.target.value)}
-          placeholder="Comma-separated, e.g. React, TypeScript, Node.js"
-        />
-      </section>
+      <ProjectsSection />
+      <SkillsSection />
 
       <section className="form-section">
         <h3 className="form-section-title">Links</h3>

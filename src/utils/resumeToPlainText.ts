@@ -58,16 +58,25 @@ export function resumeToPlainText(data: ResumeData): string {
     projects.forEach((p) => {
       if (p.name?.trim()) {
         parts.push(line(p.name));
+        if (p.description?.trim()) parts.push(line(p.description));
         if (p.period) parts.push(line(p.period));
+        if (p.techStack?.length) parts.push(p.techStack.join(', '));
         if (p.details?.trim()) parts.push(line(p.details));
+        if (p.liveUrl?.trim()) parts.push(line(p.liveUrl));
+        if (p.githubUrl?.trim()) parts.push(line(p.githubUrl));
         parts.push('');
       }
     });
   }
 
-  if (skills.trim()) {
+  const allSkills = [
+    ...(skills.technical || []),
+    ...(skills.soft || []),
+    ...(skills.tools || []),
+  ].filter(Boolean);
+  if (allSkills.length > 0) {
     parts.push(sectionTitle('Skills'));
-    parts.push(skills.trim());
+    parts.push(allSkills.join(', '));
     parts.push('');
   }
 

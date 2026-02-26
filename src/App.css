@@ -752,6 +752,132 @@
   color: #5a5f6b;
 }
 
+/* Skills accordion */
+.skills-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.skill-category-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f0f2f5;
+}
+.skill-chips-wrap,
+.project-tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: #2d3139;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #e4e6eb;
+}
+.skill-chip-remove {
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  color: #b0b3b8;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+}
+.skill-chip-remove:hover {
+  color: #f0f2f5;
+}
+.skill-tag-input {
+  min-width: 8rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #3a3f4b;
+  background: #1a1d23;
+  color: #e4e6eb;
+  font-size: 0.85rem;
+}
+.skill-tag-input::placeholder {
+  color: #6b7080;
+}
+.suggest-skills-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Projects accordion */
+.projects-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.project-accordion-item {
+  border: 1px solid #3a3f4b;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #252830;
+}
+.project-accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.75rem;
+  background: none;
+  border: none;
+  color: #e4e6eb;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+.project-accordion-header:hover {
+  background: #2d3139;
+}
+.project-accordion-chevron {
+  font-size: 0.7rem;
+  color: #b0b3b8;
+}
+.project-accordion-body {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #3a3f4b;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.project-accordion-body label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #b0b3b8;
+}
+.project-accordion-body .span-2 {
+  grid-column: span 2;
+}
+.char-counter {
+  font-size: 0.75rem;
+  color: #6b7080;
+}
+.project-tech-wrap {
+  margin: 0;
+}
+.project-tech-input {
+  flex: 1;
+  min-width: 6rem;
+}
+.project-accordion-actions {
+  margin-top: 0.5rem;
+}
+.project-delete-btn {
+  color: #b0b3b8;
+}
+
 /* Live preview (builder right panel) */
 .live-preview-shell {
   flex: 1;
@@ -873,6 +999,71 @@
 }
 .live-preview-paper .preview-links a:hover {
   text-decoration: underline;
+}
+.live-preview-paper .preview-project-card {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #252830;
+  border-radius: 6px;
+  border: 1px solid #3a3f4b;
+}
+.live-preview-paper .preview-project-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.35rem;
+}
+.live-preview-paper .preview-project-desc {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #b0b3b8;
+  line-height: 1.4;
+}
+.live-preview-paper .preview-project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+.live-preview-paper .preview-pill {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  background: #2d3139;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  color: #b0b3b8;
+}
+.live-preview-paper .preview-project-links {
+  margin-top: 0.35rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.live-preview-paper .preview-link-icon {
+  color: #2d6ae0;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.live-preview-paper .preview-skills-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.live-preview-paper .preview-skill-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+.live-preview-paper .preview-skill-group-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #b0b3b8;
+  flex-shrink: 0;
+}
+.live-preview-paper .preview-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 /* Preview page — minimal black + white resume */
@@ -1006,6 +1197,44 @@
   color: #888;
   font-style: italic;
   margin: 1rem 0 0;
+}
+.resume-doc-project-card .resume-doc-pills {
+  margin: 0.25rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.resume-doc-pill {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  background: #f0f0f0;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #333;
+}
+.resume-doc-links {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+}
+.resume-doc-links a {
+  color: #111;
+  text-decoration: underline;
+}
+.resume-doc-skills-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.resume-doc-skill-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+.resume-doc-skill-label {
+  font-weight: 600;
+  color: #111;
+  flex-shrink: 0;
 }
 
 /* Proof app page (placeholder) */

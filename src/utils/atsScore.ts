@@ -1,4 +1,4 @@
-import type { ResumeData } from '../types/resume';
+import type { ResumeData, SkillsData } from '../types/resume';
 
 const MAX_SCORE = 100;
 
@@ -11,11 +11,8 @@ function hasNumberInBullet(text: string | undefined): boolean {
   return /\d|%|\bk\b/i.test(text);
 }
 
-function skillsCount(skills: string): number {
-  return skills
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean).length;
+function skillsCount(skills: SkillsData): number {
+  return (skills.technical?.length ?? 0) + (skills.soft?.length ?? 0) + (skills.tools?.length ?? 0);
 }
 
 function educationIsComplete(entry: { institution: string; degree: string; period: string }): boolean {
@@ -61,7 +58,7 @@ export function computeATSScore(data: ResumeData): ATSResult {
   } else if (skillItems > 0) {
     suggestions.push('Add more skills (target 8+).');
   } else {
-    suggestions.push('Add skills (comma-separated, target 8+).');
+    suggestions.push('Add skills in Technical, Soft, or Tools categories.');
   }
 
   const hasLink = Boolean(
@@ -128,7 +125,7 @@ export function getTopImprovements(data: ResumeData): string[] {
   }
 
   const skillItems = skillsCount(data.skills);
-  if (skillItems < 8 && (skillItems > 0 || data.skills.trim())) {
+  if (skillItems < 8 && skillItems > 0) {
     list.push('Add more skills (target 8+) to improve keyword match.');
   }
 

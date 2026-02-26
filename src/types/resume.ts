@@ -24,8 +24,18 @@ export type ExperienceEntry = {
 export type ProjectEntry = {
   id: string;
   name: string;
+  description?: string;
   period?: string;
   details?: string;
+  techStack?: string[];
+  liveUrl?: string;
+  githubUrl?: string;
+};
+
+export type SkillsData = {
+  technical: string[];
+  soft: string[];
+  tools: string[];
 };
 
 export type Links = {
@@ -39,7 +49,7 @@ export type ResumeData = {
   education: EducationEntry[];
   experience: ExperienceEntry[];
   projects: ProjectEntry[];
-  skills: string;
+  skills: SkillsData;
   links: Links;
 };
 
@@ -64,7 +74,27 @@ export function createEmptyExperience(): ExperienceEntry {
 }
 
 export function createEmptyProject(): ProjectEntry {
-  return { id: crypto.randomUUID(), name: '', period: '', details: '' };
+  return {
+    id: crypto.randomUUID(),
+    name: '',
+    description: '',
+    period: '',
+    details: '',
+    techStack: [],
+    liveUrl: '',
+    githubUrl: '',
+  };
+}
+
+export const emptySkillsData: SkillsData = {
+  technical: [],
+  soft: [],
+  tools: [],
+};
+
+export function migrateSkillsFromString(s: string): SkillsData {
+  const list = s.split(',').map((x) => x.trim()).filter(Boolean);
+  return { technical: list, soft: [], tools: [] };
 }
 
 export const initialResumeData: ResumeData = {
@@ -73,6 +103,6 @@ export const initialResumeData: ResumeData = {
   education: [createEmptyEducation()],
   experience: [createEmptyExperience()],
   projects: [createEmptyProject()],
-  skills: '',
+  skills: { ...emptySkillsData },
   links: { ...emptyLinks },
 };

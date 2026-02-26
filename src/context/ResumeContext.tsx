@@ -12,7 +12,10 @@ import {
   createEmptyEducation,
   createEmptyExperience,
   createEmptyProject,
+  emptySkillsData,
+  migrateSkillsFromString,
 } from '../types/resume';
+import type { SkillsData } from '../types/resume';
 
 const STORAGE_KEY = 'resumeBuilderData';
 
@@ -23,13 +26,29 @@ function loadStoredData(): ResumeData {
     const parsed = JSON.parse(raw) as unknown;
     if (parsed && typeof parsed === 'object' && 'personal' in parsed) {
       const p = parsed as Record<string, unknown>;
+      const skills =
+        typeof p.skills === 'string'
+          ? migrateSkillsFromString(p.skills)
+          : (p.skills && typeof p.skills === 'object' && 'technical' in (p.skills as object))
+            ? { ...emptySkillsData, ...(p.skills as object) } as SkillsData
+            : initialResumeData.skills;
+      const rawProjects = Array.isArray(p.projects) ? (p.projects as ProjectEntry[]) : initialResumeData.projects;
+      const projects = rawProjects.map((proj) => ({
+        ...createEmptyProject(),
+        ...proj,
+        id: proj.id || crypto.randomUUID(),
+        description: proj.description ?? '',
+        techStack: Array.isArray(proj.techStack) ? proj.techStack : [],
+        liveUrl: proj.liveUrl ?? '',
+        githubUrl: proj.githubUrl ?? '',
+      }));
       return {
         personal: { ...initialResumeData.personal, ...(p.personal as object) },
         summary: typeof p.summary === 'string' ? p.summary : initialResumeData.summary,
-        education: Array.isArray(p.education) ? p.education as EducationEntry[] : initialResumeData.education,
-        experience: Array.isArray(p.experience) ? p.experience as ExperienceEntry[] : initialResumeData.experience,
-        projects: Array.isArray(p.projects) ? p.projects as ProjectEntry[] : initialResumeData.projects,
-        skills: typeof p.skills === 'string' ? p.skills : initialResumeData.skills,
+        education: Array.isArray(p.education) ? (p.education as EducationEntry[]) : initialResumeData.education,
+        experience: Array.isArray(p.experience) ? (p.experience as ExperienceEntry[]) : initialResumeData.experience,
+        projects,
+        skills,
         links: { ...initialResumeData.links, ...(p.links as object) },
       };
     }
@@ -78,11 +97,19 @@ const SAMPLE_DATA: ResumeData = {
     {
       id: 'pr1',
       name: 'AI Resume Builder',
+      description: 'Full-stack resume builder with live preview and ATS-friendly output.',
       period: '2025',
-      details: 'Full-stack resume builder with live preview and ATS-friendly output.',
+      details: '',
+      techStack: ['React', 'TypeScript', 'Vite'],
+      liveUrl: '',
+      githubUrl: '',
     },
   ],
-  skills: 'React, TypeScript, Node.js, CSS, REST APIs, Git',
+  skills: {
+    technical: ['React', 'TypeScript', 'Node.js', 'CSS', 'REST APIs'],
+    soft: ['Problem Solving', 'Communication'],
+    tools: ['Git'],
+  },
   links: {
     github: 'https://github.com/alexchen',
     linkedin: 'https://linkedin.com/in/alexchen',
@@ -105,7 +132,10 @@ type ResumeContextValue = {
   addProject: () => void;
   removeProject: (id: string) => void;
   updateProject: (id: string, patch: Partial<ProjectEntry>) => void;
-  setSkills: (s: string) => void;
+  setSkills: (s: SkillsData) => void;
+  addSkill: (category: keyof SkillsData, skill: string) => void;
+  removeSkill: (category: keyof SkillsData, index: number) => void;
+  suggestSkills: () => Promise<void>;
   setLinks: (l: Links) => void;
   loadSampleData: () => void;
 };
@@ -194,8 +224,43 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
-  const setSkills = useCallback((s: string) => {
+  const setSkills = useCallback((s: SkillsData) => {
     setData((prev) => ({ ...prev, skills: s }));
+  }, []);
+
+  const addSkill = useCallback((category: keyof SkillsData, skill: string) => {
+    const trimmed = skill.trim();
+    if (!trimmed) return;
+    setData((prev) => {
+      const arr = prev.skills[category];
+      if (arr.includes(trimmed)) return prev;
+      return {
+        ...prev,
+        skills: { ...prev.skills, [category]: [...arr, trimmed] },
+      };
+    });
+  }, []);
+
+  const removeSkill = useCallback((category: keyof SkillsData, index: number) => {
+    setData((prev) => ({
+      ...prev,
+      skills: {
+        ...prev.skills,
+        [category]: prev.skills[category].filter((_, i) => i !== index),
+      },
+    }));
+  }, []);
+
+  const suggestSkills = useCallback(async () => {
+    await new Promise((r) => setTimeout(r, 1000));
+    setData((prev) => ({
+      ...prev,
+      skills: {
+        technical: [...new Set([...prev.skills.technical, 'TypeScript', 'React', 'Node.js', 'PostgreSQL', 'GraphQL'])],
+        soft: [...new Set([...prev.skills.soft, 'Team Leadership', 'Problem Solving'])],
+        tools: [...new Set([...prev.skills.tools, 'Git', 'Docker', 'AWS'])],
+      },
+    }));
   }, []);
 
   const setLinks = useCallback((l: Links) => {
@@ -223,6 +288,9 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     removeProject,
     updateProject,
     setSkills,
+    addSkill,
+    removeSkill,
+    suggestSkills,
     setLinks,
     loadSampleData,
   };

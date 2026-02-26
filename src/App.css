@@ -888,6 +888,32 @@
 .preview-page-tabs {
   margin-bottom: 1rem;
 }
+.preview-export-bar {
+  margin-bottom: 1.25rem;
+}
+.export-warning {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: #6b7080;
+  font-style: italic;
+}
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.export-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #3a3f4b;
+  background: #2d3139;
+  color: #e4e6eb;
+  cursor: pointer;
+}
+.export-btn:hover {
+  background: #3a3f4b;
+}
 .resume-document {
   background: #fff;
   color: #111;
@@ -930,6 +956,11 @@
 }
 .resume-doc-section {
   margin-bottom: 1.25rem;
+  break-inside: avoid;
+}
+.resume-doc-block {
+  margin-bottom: 1rem;
+  page-break-inside: avoid;
 }
 .resume-doc-h2 {
   margin: 0 0 0.5rem;
@@ -943,9 +974,8 @@
   margin: 0;
   font-size: 0.95rem;
   color: #333;
-}
-.resume-doc-block {
-  margin-bottom: 1rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .resume-doc-block-head {
   display: flex;
@@ -999,4 +1029,61 @@
   margin: 0;
   font-size: 0.9rem;
   color: #b0b3b8;
+}
+
+/* Print mode: hide UI, resume only, white background, no colors */
+@media print {
+  @page {
+    margin: 1.25cm;
+  }
+  .no-print,
+  .app-nav,
+  .app-bottom-panel {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .preview-page {
+    padding: 0;
+    background: #fff;
+    min-height: auto;
+  }
+  .preview-page-inner {
+    max-width: none;
+    margin: 0;
+  }
+  .resume-document {
+    background: #fff !important;
+    color: #111 !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 1.5rem 1.25rem 2rem !important;
+    margin: 0;
+  }
+  .resume-document * {
+    color: #111 !important;
+  }
+  .resume-doc-header {
+    border-bottom-color: #111 !important;
+  }
+  .resume-doc-h2 {
+    color: #111 !important;
+  }
+  .resume-doc-strong,
+  .resume-doc-name {
+    color: #111 !important;
+  }
+  .resume-doc-muted,
+  .resume-doc-contact,
+  .resume-doc-p {
+    color: #333 !important;
+  }
+  .resume-doc-section {
+    margin-bottom: 1rem;
+    break-inside: avoid;
+  }
+  .resume-doc-block {
+    page-break-inside: avoid;
+  }
 }

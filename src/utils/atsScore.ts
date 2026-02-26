@@ -2,136 +2,144 @@ import type { ResumeData, SkillsData } from '../types/resume';
 
 const MAX_SCORE = 100;
 
-function wordCount(text: string): number {
-  return text.trim().split(/\s+/).filter(Boolean).length;
-}
-
-function hasNumberInBullet(text: string | undefined): boolean {
-  if (!text || !text.trim()) return false;
-  return /\d|%|\bk\b/i.test(text);
-}
+const ACTION_VERBS = [
+  'built', 'led', 'designed', 'improved', 'created', 'developed', 'implemented',
+  'managed', 'delivered', 'achieved', 'launched', 'optimized', 'established',
+  'drove', 'increased', 'reduced', 'coordinated', 'executed', 'spearheaded',
+  'transformed', 'streamlined', 'automated', 'scaled', 'mentored', 'shipped',
+];
 
 function skillsCount(skills: SkillsData): number {
   return (skills.technical?.length ?? 0) + (skills.soft?.length ?? 0) + (skills.tools?.length ?? 0);
 }
 
-function educationIsComplete(entry: { institution: string; degree: string; period: string }): boolean {
-  return Boolean(
-    entry.institution?.trim() && entry.degree?.trim() && entry.period?.trim()
-  );
+function summaryHasActionVerbs(summary: string): boolean {
+  const lower = summary.trim().toLowerCase();
+  return ACTION_VERBS.some((verb) => lower.includes(verb));
 }
+
+export type ATSRule = {
+  key: string;
+  points: number;
+  earned: boolean;
+  suggestion: string;
+};
 
 export type ATSResult = {
   score: number;
   suggestions: string[];
+  rules: ATSRule[];
 };
 
 export function computeATSScore(data: ResumeData): ATSResult {
+  const rules: ATSRule[] = [];
   let score = 0;
-  const suggestions: string[] = [];
 
-  const summaryWords = wordCount(data.summary);
-  if (summaryWords >= 40 && summaryWords <= 120) {
-    score += 15;
-  } else if (data.summary.trim()) {
-    if (summaryWords < 40) suggestions.push('Write a stronger summary (40–120 words).');
-    else if (summaryWords > 120) suggestions.push('Shorten your summary to 40–120 words.');
-  } else {
-    suggestions.push('Add a professional summary (40–120 words).');
-  }
+  const nameOk = Boolean(data.personal.name?.trim());
+  rules.push({
+    key: 'name',
+    points: 10,
+    earned: nameOk,
+    suggestion: 'Add your name (+10 points)',
+  });
+  if (nameOk) score += 10;
 
-  if (data.projects.length >= 2) {
-    score += 10;
-  } else if (data.projects.filter((p) => p.name?.trim()).length < 2) {
-    suggestions.push('Add at least 2 projects.');
-  }
+  const emailOk = Boolean(data.personal.email?.trim());
+  rules.push({
+    key: 'email',
+    points: 10,
+    earned: emailOk,
+    suggestion: 'Add your email (+10 points)',
+  });
+  if (emailOk) score += 10;
 
-  if (data.experience.some((e) => e.role?.trim() || e.company?.trim())) {
-    score += 10;
-  } else {
-    suggestions.push('Add at least 1 experience entry.');
-  }
+  const summaryLongEnough = (data.summary?.trim().length ?? 0) > 50;
+  rules.push({
+    key: 'summary',
+    points: 10,
+    earned: summaryLongEnough,
+    suggestion: 'Add a professional summary longer than 50 characters (+10 points)',
+  });
+  if (summaryLongEnough) score += 10;
 
-  const skillItems = skillsCount(data.skills);
-  if (skillItems >= 8) {
-    score += 10;
-  } else if (skillItems > 0) {
-    suggestions.push('Add more skills (target 8+).');
-  } else {
-    suggestions.push('Add skills in Technical, Soft, or Tools categories.');
-  }
-
-  const hasLink = Boolean(
-    (data.links.github && data.links.github.trim()) ||
-    (data.links.linkedin && data.links.linkedin.trim())
+  const experienceWithBullets = data.experience.some(
+    (e) => (e.role?.trim() || e.company?.trim()) && (e.details?.trim() ?? '').length > 0
   );
-  if (hasLink) {
-    score += 10;
-  } else {
-    suggestions.push('Add GitHub or LinkedIn link.');
-  }
+  rules.push({
+    key: 'experience-bullets',
+    points: 15,
+    earned: experienceWithBullets,
+    suggestion: 'Add at least 1 experience entry with bullet points (+15 points)',
+  });
+  if (experienceWithBullets) score += 15;
 
-  const hasMeasurable =
-    data.experience.some((e) => hasNumberInBullet(e.details)) ||
-    data.projects.some((p) => hasNumberInBullet(p.details));
-  if (hasMeasurable) {
-    score += 15;
-  } else if (
-    data.experience.some((e) => e.details?.trim()) ||
-    data.projects.some((p) => p.details?.trim())
-  ) {
-    suggestions.push('Add measurable impact (numbers, %, etc.) in bullets.');
-  } else if (data.experience.length > 0 || data.projects.some((p) => p.name?.trim())) {
-    suggestions.push('Add measurable impact (numbers, %, etc.) in experience or project details.');
-  }
+  const hasEducation = data.education.some(
+    (e) => e.institution?.trim() || e.degree?.trim() || e.period?.trim()
+  );
+  rules.push({
+    key: 'education',
+    points: 10,
+    earned: hasEducation,
+    suggestion: 'Add at least 1 education entry (+10 points)',
+  });
+  if (hasEducation) score += 10;
 
-  const educationComplete =
-    data.education.length > 0 &&
-    data.education.some((e) => educationIsComplete(e));
-  if (educationComplete) {
-    score += 10;
-  } else if (data.education.some((e) => e.institution || e.degree || e.period)) {
-    suggestions.push('Complete education fields (institution, degree, period).');
-  }
+  const skillsOk = skillsCount(data.skills) >= 5;
+  rules.push({
+    key: 'skills',
+    points: 10,
+    earned: skillsOk,
+    suggestion: 'Add at least 5 skills (+10 points)',
+  });
+  if (skillsOk) score += 10;
+
+  const hasProject = data.projects.some((p) => p.name?.trim());
+  rules.push({
+    key: 'project',
+    points: 10,
+    earned: hasProject,
+    suggestion: 'Add at least 1 project (+10 points)',
+  });
+  if (hasProject) score += 10;
+
+  const phoneOk = Boolean(data.personal.phone?.trim());
+  rules.push({
+    key: 'phone',
+    points: 5,
+    earned: phoneOk,
+    suggestion: 'Add your phone number (+5 points)',
+  });
+  if (phoneOk) score += 5;
+
+  const linkedinOk = Boolean(data.links.linkedin?.trim());
+  rules.push({
+    key: 'linkedin',
+    points: 5,
+    earned: linkedinOk,
+    suggestion: 'Add your LinkedIn URL (+5 points)',
+  });
+  if (linkedinOk) score += 5;
+
+  const githubOk = Boolean(data.links.github?.trim());
+  rules.push({
+    key: 'github',
+    points: 5,
+    earned: githubOk,
+    suggestion: 'Add your GitHub URL (+5 points)',
+  });
+  if (githubOk) score += 5;
+
+  const actionVerbsOk = summaryHasActionVerbs(data.summary ?? '');
+  rules.push({
+    key: 'action-verbs',
+    points: 10,
+    earned: actionVerbsOk,
+    suggestion: 'Use action verbs in your summary (e.g. built, led, designed, improved) (+10 points)',
+  });
+  if (actionVerbsOk) score += 10;
 
   score = Math.min(score, MAX_SCORE);
-  return {
-    score,
-    suggestions: suggestions.slice(0, 3),
-  };
-}
+  const suggestions = rules.filter((r) => !r.earned).map((r) => r.suggestion);
 
-/** Top 3 improvements for the improvement panel (Step 4). Does not affect score. */
-export function getTopImprovements(data: ResumeData): string[] {
-  const list: string[] = [];
-
-  const projectCount = data.projects.filter((p) => p.name?.trim()).length;
-  if (projectCount < 2) {
-    list.push('Add at least 2 projects to strengthen your profile.');
-  }
-
-  const hasMeasurable =
-    data.experience.some((e) => hasNumberInBullet(e.details)) ||
-    data.projects.some((p) => hasNumberInBullet(p.details));
-  if (!hasMeasurable && (data.experience.some((e) => e.details?.trim()) || data.projects.some((p) => p.details?.trim()))) {
-    list.push('Add measurable impact (numbers, %, results) in experience or project bullets.');
-  } else if (!hasMeasurable && (data.experience.length > 0 || projectCount > 0)) {
-    list.push('Add measurable impact (numbers, %) when you add bullet points.');
-  }
-
-  const summaryWords = wordCount(data.summary);
-  if (data.summary.trim() && summaryWords < 40) {
-    list.push('Expand your summary to at least 40 words for stronger ATS alignment.');
-  }
-
-  const skillItems = skillsCount(data.skills);
-  if (skillItems < 8 && skillItems > 0) {
-    list.push('Add more skills (target 8+) to improve keyword match.');
-  }
-
-  if (!data.experience.some((e) => e.role?.trim() || e.company?.trim())) {
-    list.push('Add experience or internship/project work to show practical application.');
-  }
-
-  return list.slice(0, 3);
+  return { score, suggestions, rules };
 }

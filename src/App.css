@@ -604,7 +604,7 @@
   flex: 1;
   min-height: 0;
 }
-/* ATS Score v1 — calm, premium */
+/* ATS Score — circular progress, bands, suggestions */
 .ats-score-block {
   flex-shrink: 0;
   padding: 1rem 1rem 0.75rem;
@@ -618,71 +618,81 @@
   letter-spacing: 0.04em;
   margin-bottom: 0.5rem;
 }
-.ats-score-meter-wrap {
+.ats-score-circular-wrap {
   position: relative;
-  height: 8px;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #1a1d23;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
 }
-.ats-score-meter-bg {
+.ats-score-circle-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(0deg);
+}
+.ats-score-circle-bg {
+  stroke: #2d3139;
+  transition: stroke 0.2s ease;
+}
+.ats-score-circle-progress {
+  transition: stroke-dashoffset 0.4s ease, stroke 0.2s ease;
+}
+.ats-score-circle-progress.ats-band-red {
+  stroke: #c53030;
+}
+.ats-score-circle-progress.ats-band-amber {
+  stroke: #c05621;
+}
+.ats-score-circle-progress.ats-band-green {
+  stroke: #276749;
+}
+.ats-score-circular-center {
   position: absolute;
   inset: 0;
-  background: #2d3139;
-  border-radius: 4px;
-}
-.ats-score-meter-bar {
-  position: relative;
-  z-index: 1;
-  height: 100%;
-  border-radius: 4px;
-  background: #2d6ae0;
-  transition: width 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 .ats-score-value {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: #f0f2f5;
-  margin-top: 0.35rem;
+  line-height: 1.2;
+}
+.ats-score-max {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #b0b3b8;
+}
+.ats-score-band {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-top: 0.2rem;
+  max-width: 90px;
+  text-align: center;
+  line-height: 1.2;
+}
+.ats-score-band.ats-band-red {
+  color: #fc8181;
+}
+.ats-score-band.ats-band-amber {
+  color: #ed8936;
+}
+.ats-score-band.ats-band-green {
+  color: #68d391;
 }
 .ats-suggestions {
-  margin: 0.5rem 0 0;
+  margin: 0.75rem 0 0;
   padding-left: 1.1rem;
   font-size: 0.8rem;
   color: #b0b3b8;
   line-height: 1.4;
 }
 .ats-suggestions li {
-  margin-bottom: 0.2rem;
-}
-.ats-improvements-section {
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #3a3f4b;
-}
-.ats-improvements-label {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #b0b3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.4rem;
-}
-.ats-improvements-list {
-  margin: 0;
-  padding-left: 1.1rem;
-  font-size: 0.8rem;
-  color: #b0b3b8;
-  line-height: 1.4;
-}
-.ats-improvements-list li {
   margin-bottom: 0.25rem;
-}
-.ats-improvements-none {
-  margin: 0;
-  font-size: 0.8rem;
-  color: #6b7080;
-  font-style: italic;
 }
 @media (min-width: 1024px) {
   .builder-page {
@@ -1222,6 +1232,23 @@
   border: none;
   padding: 0;
 }
+.preview-page-ats {
+  margin-bottom: 1rem;
+}
+.preview-page-ats .ats-score-block {
+  border: none;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+.preview-page-ats .ats-score-label,
+.preview-page-ats .ats-suggestions {
+  color: #5a5a5a;
+}
+.preview-page-ats .ats-score-value { color: #111; }
+.preview-page-ats .ats-score-max { color: #666; }
+.preview-page-ats .ats-score-band.ats-band-red { color: #c53030; }
+.preview-page-ats .ats-score-band.ats-band-amber { color: #c05621; }
+.preview-page-ats .ats-score-band.ats-band-green { color: #276749; }
 .export-toast {
   margin-bottom: 0.5rem;
   padding: 0.5rem 0.75rem;

@@ -3,7 +3,7 @@ import { useTemplate } from '../../context/TemplateContext';
 
 export function LivePreviewShell() {
   const { data } = useResume();
-  const { template } = useTemplate();
+  const { template, accentHsl } = useTemplate();
   const { personal, summary, education, experience, projects, skills, links } = data;
 
   const hasContact = personal.email || personal.phone || personal.location || links.github || links.linkedin;
@@ -18,21 +18,69 @@ export function LivePreviewShell() {
     skillsCount > 0 ||
     hasLinks;
 
-  return (
-    <div className="live-preview-shell">
-      <div className={`live-preview-paper template-${template}`}>
-        <header className="preview-header">
-          <h1 className="preview-name">{personal.name || 'Your Name'}</h1>
-          {(hasContact || hasLinks) && (
-            <div className="preview-contact">
-              {[personal.email, personal.phone, personal.location].filter(Boolean).map((s) => (
-                <span key={s}>{s}</span>
-              ))}
-              {links.github?.trim() && <span><a href={links.github} rel="noopener noreferrer" target="_blank">GitHub</a></span>}
-              {links.linkedin?.trim() && <span><a href={links.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a></span>}
-            </div>
-          )}
-        </header>
+  const sidebar = (
+    <div className="preview-sidebar">
+      <div className="preview-contact-block">
+        {[personal.email, personal.phone, personal.location].filter(Boolean).map((s) => (
+          <span key={s}>{s}</span>
+        ))}
+        {links.github?.trim() && <span><a href={links.github} rel="noopener noreferrer" target="_blank">GitHub</a></span>}
+        {links.linkedin?.trim() && <span><a href={links.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a></span>}
+      </div>
+      {skillsCount > 0 && (
+        <div className="preview-sidebar-skills">
+          <h3 className="preview-section-title">Skills</h3>
+          <div className="preview-skills-groups">
+            {skills.technical?.length > 0 && (
+              <div className="preview-skill-group">
+                <span className="preview-skill-group-label">Technical</span>
+                <div className="preview-pills">
+                  {skills.technical.map((s, i) => (
+                    <span key={i} className="preview-pill">{s}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {skills.soft?.length > 0 && (
+              <div className="preview-skill-group">
+                <span className="preview-skill-group-label">Soft</span>
+                <div className="preview-pills">
+                  {skills.soft.map((s, i) => (
+                    <span key={i} className="preview-pill">{s}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {skills.tools?.length > 0 && (
+              <div className="preview-skill-group">
+                <span className="preview-skill-group-label">Tools</span>
+                <div className="preview-pills">
+                  {skills.tools.map((s, i) => (
+                    <span key={i} className="preview-pill">{s}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const mainContent = (
+    <>
+      <header className="preview-header">
+        <h1 className="preview-name">{personal.name || 'Your Name'}</h1>
+        {template !== 'modern' && (hasContact || hasLinks) && (
+          <div className="preview-contact">
+            {[personal.email, personal.phone, personal.location].filter(Boolean).map((s) => (
+              <span key={s}>{s}</span>
+            ))}
+            {links.github?.trim() && <span><a href={links.github} rel="noopener noreferrer" target="_blank">GitHub</a></span>}
+            {links.linkedin?.trim() && <span><a href={links.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a></span>}
+          </div>
+        )}
+      </header>
         {summary.trim() && (
           <section className="preview-section">
             <h2 className="preview-section-title">Summary</h2>
@@ -99,7 +147,7 @@ export function LivePreviewShell() {
             ))}
           </section>
         )}
-        {skillsCount > 0 && (
+        {template !== 'modern' && skillsCount > 0 && (
           <section className="preview-section">
             <h2 className="preview-section-title">Skills</h2>
             <div className="preview-skills-groups">
@@ -136,7 +184,7 @@ export function LivePreviewShell() {
             </div>
           </section>
         )}
-        {hasLinks && (
+        {template !== 'modern' && hasLinks && (
           <section className="preview-section">
             <h2 className="preview-section-title">Links</h2>
             <div className="preview-links">
@@ -153,6 +201,23 @@ export function LivePreviewShell() {
           <div className="preview-placeholder">
             <p>Your resume preview will appear here as you fill the form.</p>
           </div>
+        )}
+    </>
+  );
+
+  return (
+    <div className="live-preview-shell">
+      <div
+        className={`live-preview-paper template-${template}`}
+        style={{ ['--resume-accent' as string]: accentHsl }}
+      >
+        {template === 'modern' ? (
+          <div className="preview-modern-layout">
+            {sidebar}
+            <div className="preview-main">{mainContent}</div>
+          </div>
+        ) : (
+          mainContent
         )}
       </div>
     </div>

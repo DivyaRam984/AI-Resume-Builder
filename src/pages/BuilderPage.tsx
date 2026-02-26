@@ -1,7 +1,8 @@
 import { ResumeForm } from '../components/resume/ResumeForm';
 import { LivePreviewShell } from '../components/resume/LivePreviewShell';
 import { ATSScoreMeter } from '../components/resume/ATSScoreMeter';
-import { TemplateTabs } from '../components/resume/TemplateTabs';
+import { TemplatePicker } from '../components/resume/TemplatePicker';
+import { ColorThemePicker } from '../components/resume/ColorThemePicker';
 
 export function BuilderPage() {
   return (
@@ -12,9 +13,10 @@ export function BuilderPage() {
       <div className="builder-right">
         <div className="builder-preview-header">
           <span>Live Preview</span>
-          <TemplateTabs />
         </div>
         <div className="builder-right-content">
+          <TemplatePicker />
+          <ColorThemePicker />
           <ATSScoreMeter />
           <LivePreviewShell />
         </div>

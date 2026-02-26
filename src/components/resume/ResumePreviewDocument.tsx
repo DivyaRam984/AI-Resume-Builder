@@ -6,25 +6,63 @@ import { useTemplate } from '../../context/TemplateContext';
  */
 export function ResumePreviewDocument() {
   const { data } = useResume();
-  const { template } = useTemplate();
+  const { template, accentHsl } = useTemplate();
   const { personal, summary, education, experience, projects, skills, links } = data;
   const skillsCount = (skills.technical?.length ?? 0) + (skills.soft?.length ?? 0) + (skills.tools?.length ?? 0);
 
-  return (
-    <article className={`resume-document template-${template}`}>
+  const contactLine = [personal.email, personal.phone, personal.location]
+    .filter(Boolean)
+    .join(' · ') +
+    ((links.github?.trim() || links.linkedin?.trim()) ? ' · ' + [links.github, links.linkedin].filter(Boolean).join(' · ') : '');
+
+  const sidebar = (
+    <div className="resume-doc-sidebar">
+      <div className="resume-doc-contact-block">
+        {[personal.email, personal.phone, personal.location].filter(Boolean).join(' · ')}
+        {links.github?.trim() && <><br /><a href={links.github} rel="noopener noreferrer" target="_blank">GitHub</a></>}
+        {links.linkedin?.trim() && <><br /><a href={links.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a></>}
+      </div>
+      {skillsCount > 0 && (
+        <div className="resume-doc-sidebar-skills">
+          <h2 className="resume-doc-h2">Skills</h2>
+          <div className="resume-doc-skills-groups">
+            {skills.technical?.length > 0 && (
+              <div className="resume-doc-skill-group">
+                <span className="resume-doc-skill-label">Technical:</span>{' '}
+                {skills.technical.map((s, i) => (
+                  <span key={i} className="resume-doc-pill">{s}</span>
+                ))}
+              </div>
+            )}
+            {skills.soft?.length > 0 && (
+              <div className="resume-doc-skill-group">
+                <span className="resume-doc-skill-label">Soft:</span>{' '}
+                {skills.soft.map((s, i) => (
+                  <span key={i} className="resume-doc-pill">{s}</span>
+                ))}
+              </div>
+            )}
+            {skills.tools?.length > 0 && (
+              <div className="resume-doc-skill-group">
+                <span className="resume-doc-skill-label">Tools:</span>{' '}
+                {skills.tools.map((s, i) => (
+                  <span key={i} className="resume-doc-pill">{s}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const mainContent = (
+    <>
       <header className="resume-doc-header">
         <h1 className="resume-doc-name">{personal.name || 'Your Name'}</h1>
-        <div className="resume-doc-contact">
-          {[personal.email, personal.phone, personal.location]
-            .filter(Boolean)
-            .join(' · ')}
-          {(links.github || links.linkedin) && (
-            <>
-              {' · '}
-              {[links.github, links.linkedin].filter(Boolean).join(' · ')}
-            </>
-          )}
-        </div>
+        {template !== 'modern' && contactLine && (
+          <div className="resume-doc-contact">{contactLine}</div>
+        )}
       </header>
 
       {summary && (
@@ -96,7 +134,7 @@ export function ResumePreviewDocument() {
         </section>
       )}
 
-      {skillsCount > 0 && (
+      {template !== 'modern' && skillsCount > 0 && (
         <section className="resume-doc-section">
           <h2 className="resume-doc-h2">Skills</h2>
           <div className="resume-doc-skills-groups">
@@ -128,7 +166,7 @@ export function ResumePreviewDocument() {
         </section>
       )}
 
-      {(links.github?.trim() || links.linkedin?.trim()) && (
+      {template !== 'modern' && (links.github?.trim() || links.linkedin?.trim()) && (
         <section className="resume-doc-section">
           <h2 className="resume-doc-h2">Links</h2>
           <p className="resume-doc-p resume-doc-skills">
@@ -139,6 +177,22 @@ export function ResumePreviewDocument() {
 
       {!personal.name && !summary && education.every((e) => !e.institution && !e.degree) && !experience.some((e) => e.role || e.company) && !projects.some((p) => p.name) && skillsCount === 0 && !links.github?.trim() && !links.linkedin?.trim() && (
         <p className="resume-doc-empty">Add content in Builder to see your resume here.</p>
+      )}
+    </>
+  );
+
+  return (
+    <article
+      className={`resume-document template-${template}`}
+      style={{ ['--resume-accent' as string]: accentHsl }}
+    >
+      {template === 'modern' ? (
+        <div className="resume-doc-modern-layout">
+          {sidebar}
+          <div className="resume-doc-main">{mainContent}</div>
+        </div>
+      ) : (
+        mainContent
       )}
     </article>
   );

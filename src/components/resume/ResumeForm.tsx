@@ -1,4 +1,5 @@
 import { useResume } from '../../context/ResumeContext';
+import { BulletDetailsField } from './BulletDetailsField';
 
 export function ResumeForm() {
   const { data, setPersonal, setSummary, addEducation, removeEducation, updateEducation, addExperience, removeExperience, updateExperience, addProject, removeProject, updateProject, setSkills, setLinks, loadSampleData } = useResume();
@@ -152,11 +153,11 @@ export function ResumeForm() {
                 />
               </label>
               <label className="span-2">
-                <span>Details (optional)</span>
-                <input
+                <span>Details (optional) — one bullet per line</span>
+                <BulletDetailsField
                   value={entry.details ?? ''}
-                  onChange={(e) => updateExperience(entry.id, { details: e.target.value })}
-                  placeholder="Key responsibilities, achievements..."
+                  onChange={(v) => updateExperience(entry.id, { details: v })}
+                  placeholder="Key responsibilities, achievements... (one per line)"
                 />
               </label>
             </div>
@@ -196,11 +197,11 @@ export function ResumeForm() {
                 />
               </label>
               <label className="span-2">
-                <span>Details (optional)</span>
-                <input
+                <span>Details (optional) — one bullet per line</span>
+                <BulletDetailsField
                   value={entry.details ?? ''}
-                  onChange={(e) => updateProject(entry.id, { details: e.target.value })}
-                  placeholder="Tech stack, outcome..."
+                  onChange={(v) => updateProject(entry.id, { details: v })}
+                  placeholder="Tech stack, outcome... (one per line)"
                 />
               </label>
             </div>

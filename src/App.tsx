@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { BuildProvider } from './context/BuildContext';
 import { ResumeProvider } from './context/ResumeContext';
+import { TemplateProvider } from './context/TemplateContext';
 import { AppLayout } from './layouts/AppLayout';
 import { HomePage } from './pages/HomePage';
 import { BuilderPage } from './pages/BuilderPage';
@@ -14,6 +15,7 @@ function App() {
   return (
     <BuildProvider>
       <ResumeProvider>
+        <TemplateProvider>
         <BrowserRouter>
           <Routes>
             <Route element={<AppLayout />}>
@@ -35,6 +37,7 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
+        </TemplateProvider>
       </ResumeProvider>
     </BuildProvider>
   );

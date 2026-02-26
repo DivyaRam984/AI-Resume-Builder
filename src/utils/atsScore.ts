@@ -103,3 +103,38 @@ export function computeATSScore(data: ResumeData): ATSResult {
     suggestions: suggestions.slice(0, 3),
   };
 }
+
+/** Top 3 improvements for the improvement panel (Step 4). Does not affect score. */
+export function getTopImprovements(data: ResumeData): string[] {
+  const list: string[] = [];
+
+  const projectCount = data.projects.filter((p) => p.name?.trim()).length;
+  if (projectCount < 2) {
+    list.push('Add at least 2 projects to strengthen your profile.');
+  }
+
+  const hasMeasurable =
+    data.experience.some((e) => hasNumberInBullet(e.details)) ||
+    data.projects.some((p) => hasNumberInBullet(p.details));
+  if (!hasMeasurable && (data.experience.some((e) => e.details?.trim()) || data.projects.some((p) => p.details?.trim()))) {
+    list.push('Add measurable impact (numbers, %, results) in experience or project bullets.');
+  } else if (!hasMeasurable && (data.experience.length > 0 || projectCount > 0)) {
+    list.push('Add measurable impact (numbers, %) when you add bullet points.');
+  }
+
+  const summaryWords = wordCount(data.summary);
+  if (data.summary.trim() && summaryWords < 40) {
+    list.push('Expand your summary to at least 40 words for stronger ATS alignment.');
+  }
+
+  const skillItems = skillsCount(data.skills);
+  if (skillItems < 8 && (skillItems > 0 || data.skills.trim())) {
+    list.push('Add more skills (target 8+) to improve keyword match.');
+  }
+
+  if (!data.experience.some((e) => e.role?.trim() || e.company?.trim())) {
+    list.push('Add experience or internship/project work to show practical application.');
+  }
+
+  return list.slice(0, 3);
+}

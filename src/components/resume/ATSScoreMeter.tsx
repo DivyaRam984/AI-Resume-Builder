@@ -1,9 +1,10 @@
 import { useResume } from '../../context/ResumeContext';
-import { computeATSScore } from '../../utils/atsScore';
+import { computeATSScore, getTopImprovements } from '../../utils/atsScore';
 
 export function ATSScoreMeter() {
   const { data } = useResume();
   const { score, suggestions } = computeATSScore(data);
+  const improvements = getTopImprovements(data);
 
   return (
     <div className="ats-score-block">
@@ -20,6 +21,18 @@ export function ATSScoreMeter() {
           ))}
         </ul>
       )}
+      <div className="ats-improvements-section">
+        <div className="ats-improvements-label">Top 3 Improvements</div>
+        {improvements.length > 0 ? (
+          <ul className="ats-improvements-list">
+            {improvements.map((s, i) => (
+              <li key={i}>{s}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="ats-improvements-none">No improvements needed in these areas.</p>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,14 +1,16 @@
 import { useResume } from '../../context/ResumeContext';
+import { useTemplate } from '../../context/TemplateContext';
 
 /**
  * Clean resume layout for /preview — premium typography, minimal black + white, no colors.
  */
 export function ResumePreviewDocument() {
   const { data } = useResume();
+  const { template } = useTemplate();
   const { personal, summary, education, experience, projects, skills, links } = data;
 
   return (
-    <article className="resume-document">
+    <article className={`resume-document template-${template}`}>
       <header className="resume-doc-header">
         <h1 className="resume-doc-name">{personal.name || 'Your Name'}</h1>
         <div className="resume-doc-contact">

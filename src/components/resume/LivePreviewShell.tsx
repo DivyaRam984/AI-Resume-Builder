@@ -1,7 +1,9 @@
 import { useResume } from '../../context/ResumeContext';
+import { useTemplate } from '../../context/TemplateContext';
 
 export function LivePreviewShell() {
   const { data } = useResume();
+  const { template } = useTemplate();
   const { personal, summary, education, experience, projects, skills, links } = data;
 
   const hasContact = personal.email || personal.phone || personal.location || links.github || links.linkedin;
@@ -17,7 +19,7 @@ export function LivePreviewShell() {
 
   return (
     <div className="live-preview-shell">
-      <div className="live-preview-paper">
+      <div className={`live-preview-paper template-${template}`}>
         <header className="preview-header">
           <h1 className="preview-name">{personal.name || 'Your Name'}</h1>
           {(hasContact || hasLinks) && (
